@@ -11,6 +11,10 @@ function multiply (a,b) {
 }
 
 function divide (a,b) {
+    if (b === 0) {
+        alert("You can't divide by 0!");
+        return;
+    }
     return a / b;
 }
 
@@ -42,23 +46,23 @@ function evaluate(equation) {
             const star = exp.indexOf('*');
             const slash = exp.indexOf('/');
             if (star === -1) {
-                a = parseInt(exp[slash-1]);
-                b = parseInt(exp[slash+1]);
+                a = parseFloat(exp[slash-1]);
+                b = parseFloat(exp[slash+1]);
                 exp.splice(slash-1, 3, divide(a,b));
             }
             else if (slash === -1) {
-                a = parseInt(exp[star-1]);
-                b = parseInt(exp[star+1]);
+                a = parseFloat(exp[star-1]);
+                b = parseFloat(exp[star+1]);
                 exp.splice(star-1, 3, multiply(a,b));
             }
             else if (star < slash && star >= 0) {
-                a = parseInt(exp[star-1]);
-                b = parseInt(exp[star+1]);
+                a = parseFloat(exp[star-1]);
+                b = parseFloat(exp[star+1]);
                 exp.splice(star-1, 3, multiply(a,b));
             }
             else if (slash < star && slash >= 0) {
-                a = parseInt(exp[slash-1]);
-                b = parseInt(exp[slash+1]);
+                a = parseFloat(exp[slash-1]);
+                b = parseFloat(exp[slash+1]);
                 exp.splice(slash-1, 3, divide(a,b));
             } 
         }
@@ -67,23 +71,23 @@ function evaluate(equation) {
                 const plus = exp.indexOf('+');
                 const minus = exp.indexOf('-');
                 if (plus === -1) {
-                    a = parseInt(exp[minus-1]);
-                    b = parseInt(exp[minus+1]);
+                    a = parseFloat(exp[minus-1]);
+                    b = parseFloat(exp[minus+1]);
                     exp.splice(minus-1, 3, subtract(a,b));
                 }
                 else if (minus === -1) {
-                    a = parseInt(exp[plus-1]);
-                    b = parseInt(exp[plus+1]);
+                    a = parseFloat(exp[plus-1]);
+                    b = parseFloat(exp[plus+1]);
                     exp.splice(plus-1, 3, add(a,b));
                 }
                 else if (plus < minus && plus >= 0) {
-                    a = parseInt(exp[plus-1]);
-                    b = parseInt(exp[plus+1]);
+                    a = parseFloat(exp[plus-1]);
+                    b = parseFloat(exp[plus+1]);
                     exp.splice(plus-1, 3, add(a,b));
                 }
                 else if (minus < plus && minus >= 0) {
-                    a = parseInt(exp[minus-1]);
-                    b = parseInt(exp[minus+1]);
+                    a = parseFloat(exp[minus-1]);
+                    b = parseFloat(exp[minus+1]);
                     exp.splice(minus-1, 3, subtract(a,b));
                 } 
             }
@@ -120,10 +124,10 @@ function populateDisplay() {
             console.log(arg);
             if (!isNaN(arg)) {
                 if (equation[0] === 0 && equation.length === 1) {
-                    equation[0] = parseInt(arg);
+                    equation[0] = parseFloat(arg);
                 }
                 else {
-                    equation.push(parseInt(arg));
+                    equation.push(parseFloat(arg));
                 }
                 refreshDisplay(equation);
             }
@@ -135,6 +139,12 @@ function populateDisplay() {
                     else {
                         equation.push(arg);
                     }
+                    const display = document.querySelector('#display-container');
+                    const prevResult = document.querySelector('#result');
+                    if (prevResult !== null) {
+                        display.removeChild(prevResult);
+                    }
+                    refreshDisplay(equation);
                     refreshDisplay(equation);
                 }
                 else if (arg === '=') {

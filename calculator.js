@@ -39,7 +39,6 @@ function createExpression(equation) {
 
 function evaluate(equation) {
     exp = createExpression(equation);
-    console.log(exp);
     while (exp.length > 1) {
         // evaluate multiplication and divison first
         if (exp.includes('/') || exp.includes('*')) {
@@ -121,7 +120,6 @@ function populateDisplay() {
     buttons.forEach((button) => {
         button.addEventListener('click', () => {
             arg = button.textContent;
-            console.log(arg);
             if (!isNaN(arg)) {
                 if (equation[0] === 0 && equation.length === 1) {
                     equation[0] = parseFloat(arg);
@@ -133,23 +131,25 @@ function populateDisplay() {
             }
             else {
                 if (operators.includes(arg)) {
+                    const display = document.querySelector('#display-container');
+                    const prevResult = document.querySelector('#result');
+                    if (prevResult !== null) {
+                        equation = [prevResult.textContent];
+                        display.removeChild(prevResult);
+                    }
                     if (operators.includes(equation[equation.length - 1])) {
                         equation[equation.length - 1] = arg;
                     }
                     else {
                         equation.push(arg);
                     }
-                    const display = document.querySelector('#display-container');
-                    const prevResult = document.querySelector('#result');
-                    if (prevResult !== null) {
-                        display.removeChild(prevResult);
-                    }
-                    refreshDisplay(equation);
                     refreshDisplay(equation);
                 }
                 else if (arg === '=') {
                     result = evaluate(equation);
-                    console.log(result);
+                    if (result % 1 !== 0) {
+                        result = result.toFixed(2);
+                    }
                     displayResult = document.createElement('div');
                     displayResult.setAttribute('id','result');
                     displayResult.textContent = result;

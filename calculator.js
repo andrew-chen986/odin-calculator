@@ -259,6 +259,149 @@ function populateDisplay() {
             }
         });
     });
+
+    body = document.querySelector('body');
+    body.addEventListener('keydown', (event) => {
+        arg = event.key;
+        console.log(arg)
+        if (!isNaN(arg)) {
+            if (equation[0] === 0 && equation.length === 1) {
+                equation[0] = parseFloat(arg);
+            }
+            else {
+                equation.push(parseFloat(arg));
+            }
+            refreshDisplay(equation);
+        }
+        else {
+            if (operators.includes(arg)) {
+                const display = document.querySelector('#display-container');
+                const prevResult = document.querySelector('#result');
+                if (prevResult !== null) {
+                    equation = [prevResult.textContent];
+                    display.removeChild(prevResult);
+                }
+                if (operators.includes(equation[equation.length - 1])) {
+                    equation[equation.length - 1] = arg;
+                }
+                else {
+                    equation.push(arg);
+                }
+                refreshDisplay(equation);
+            }
+            else if (arg === 'Enter') {
+                const display = document.querySelector('#display-container');
+                const prevResult = document.querySelector('#result');
+                if (prevResult === null) {
+                    if (equation.length !== 1) {
+                        result = evaluate(equation);
+                        if (result % 1 !== 0) {
+                            result = result.toFixed(2);
+                        }
+                        displayResult = document.createElement('div');
+                        displayResult.setAttribute('id','result');
+                        displayResult.textContent = result;
+                        display.appendChild(displayResult);
+                    }
+                }
+            }
+            else if (arg === 'Backspace') {
+                equation.pop();
+                if (equation.length == 0) {
+                    equation.push(0);
+                }
+                const display = document.querySelector('#display-container');
+                const prevResult = document.querySelector('#result');
+                if (prevResult !== null) {
+                    display.removeChild(prevResult);
+                }
+                refreshDisplay(equation);
+            }
+            else if (arg === 'Escape') {
+                equation = [0];
+                const display = document.querySelector('#display-container');
+                const prevEquation = document.querySelector('#equation');
+                const prevResult = document.querySelector('#result');
+                if (prevEquation !== null) {
+                    display.removeChild(prevEquation);
+                }
+                if (prevResult !== null) {
+                    display.removeChild(prevResult);
+                }
+                refreshDisplay(equation);
+            }
+            else if (arg === '+/-') {
+                if (isNaN(equation[equation.length - 1])) {
+                    // do nothing if not a number
+                }
+                else {
+                    // need to check if number has a decimal
+                    startIndex = equation.length - 1;
+                    endIndex = 0
+                    for (let i = startIndex; i >= 0; i--) {
+                        // if another . is found, another . would be illegal
+                        if (equation[i] == '.') {
+                            foundDecimal = true; 
+                        }
+                        // found an operating symbol, so number is over
+                        else if (isNaN(equation[i])) {
+                            endIndex = i
+                            break;
+                        }
+                    }
+                    num = []
+                    for (let i = endIndex; i < equation.length; i++) {
+                        num.push(equation[i])
+                    }
+                    if (endIndex === 0) {
+                        equation.splice(endIndex, num.length)
+                    }
+                    else {
+                        equation.splice(endIndex + 1, num.length)
+                    }
+
+                    num = parseFloat(num.join("")) * -1
+                    num = String(num)
+                    equation.push(num)
+
+                    const display = document.querySelector('#display-container');
+                    const prevEquation = document.querySelector('#equation');
+                    const prevResult = document.querySelector('#result');
+                    if (prevEquation !== null) {
+                        display.removeChild(prevEquation);
+                    }
+                    if (prevResult !== null) {
+                        display.removeChild(prevResult);
+                        equation = [prevResult.textContent]
+                        console.log(equation)
+                    }
+                    refreshDisplay(equation)
+                }
+            }
+            else if (arg === '.') {
+                // search for another . within the same number
+                startIndex = equation.length - 1;
+                endIndex = 0
+                foundDecimal = false;
+                for (let i = startIndex; i >= 0; i--) {
+                    // if another . is found, another . would be illegal
+                    if (equation[i] == '.') {
+                        foundDecimal = true; 
+                        break;
+                    }
+                    // found an operating symbol, so number is over
+                    else if (isNaN(equation[i])) {
+                        endIndex = i
+                        break;
+                    }
+                }
+                if (!foundDecimal) {
+                    equation.push(arg)
+                    refreshDisplay(equation)
+                }
+            }
+        }
+    });
 }
 
 populateDisplay();

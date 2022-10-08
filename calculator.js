@@ -192,6 +192,16 @@ function populateDisplay() {
                     }
                     else {
                         // need to check if number has a decimal
+                        const display = document.querySelector('#display-container');
+                        const prevEquation = document.querySelector('#equation');
+                        const prevResult = document.querySelector('#result');
+                        if (prevEquation !== null) {
+                            display.removeChild(prevEquation);
+                        }
+                        if (prevResult !== null) {
+                            display.removeChild(prevResult);
+                            equation = [prevResult.textContent]
+                        }
                         startIndex = equation.length - 1;
                         endIndex = 0
                         for (let i = startIndex; i >= 0; i--) {
@@ -220,17 +230,7 @@ function populateDisplay() {
                         num = String(num)
                         equation.push(num)
 
-                        const display = document.querySelector('#display-container');
-                        const prevEquation = document.querySelector('#equation');
-                        const prevResult = document.querySelector('#result');
-                        if (prevEquation !== null) {
-                            display.removeChild(prevEquation);
-                        }
-                        if (prevResult !== null) {
-                            display.removeChild(prevResult);
-                            equation = [prevResult.textContent]
-                            console.log(equation)
-                        }
+                        
                         refreshDisplay(equation)
                     }
                 }
@@ -257,13 +257,14 @@ function populateDisplay() {
                     }
                 }
             }
+            button.blur()
         });
+
     });
 
     body = document.querySelector('body');
     body.addEventListener('keydown', (event) => {
         arg = event.key;
-        console.log(arg)
         if (!isNaN(arg)) {
             if (equation[0] === 0 && equation.length === 1) {
                 equation[0] = parseFloat(arg);

@@ -146,16 +146,19 @@ function populateDisplay() {
                     refreshDisplay(equation);
                 }
                 else if (arg === '=') {
-                    if (equation.length !== 1) {
-                        result = evaluate(equation);
-                        if (result % 1 !== 0) {
-                            result = result.toFixed(2);
+                    const display = document.querySelector('#display-container');
+                    const prevResult = document.querySelector('#result');
+                    if (prevResult === null) {
+                        if (equation.length !== 1) {
+                            result = evaluate(equation);
+                            if (result % 1 !== 0) {
+                                result = result.toFixed(2);
+                            }
+                            displayResult = document.createElement('div');
+                            displayResult.setAttribute('id','result');
+                            displayResult.textContent = result;
+                            display.appendChild(displayResult);
                         }
-                        displayResult = document.createElement('div');
-                        displayResult.setAttribute('id','result');
-                        displayResult.textContent = result;
-                        const display = document.querySelector('#display-container');
-                        display.appendChild(displayResult);
                     }
                 }
                 else if (arg === 'C') {

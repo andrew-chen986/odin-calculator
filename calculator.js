@@ -194,7 +194,6 @@ function populateDisplay() {
                         // need to check if number has a decimal
                         startIndex = equation.length - 1;
                         endIndex = 0
-                        foundDecimal = false;
                         for (let i = startIndex; i >= 0; i--) {
                             // if another . is found, another . would be illegal
                             if (equation[i] == '.') {
@@ -206,50 +205,33 @@ function populateDisplay() {
                                 break;
                             }
                         }
-                        if (foundDecimal) {
-                            num = []
-                            for (let i = endIndex; i < equation.length; i++) {
-                                num.push(equation[i])
-                            }
-                            if (endIndex === 0) {
-                                equation.splice(endIndex, num.length)
-                            }
-                            else {
-                                equation.splice(endIndex + 1, num.length)
-                            }
-
-                            num = parseFloat(num.join("")) * -1
-                            num = String(num)
-                            equation.push(num)
-
-                            const display = document.querySelector('#display-container');
-                            const prevEquation = document.querySelector('#equation');
-                            const prevResult = document.querySelector('#result');
-                            if (prevEquation !== null) {
-                                display.removeChild(prevEquation);
-                            }
-                            if (prevResult !== null) {
-                                display.removeChild(prevResult);
-                                equation = [prevResult.textContent]
-                                console.log(equation)
-                            }
-                            refreshDisplay(equation)
+                        num = []
+                        for (let i = endIndex; i < equation.length; i++) {
+                            num.push(equation[i])
+                        }
+                        if (endIndex === 0) {
+                            equation.splice(endIndex, num.length)
                         }
                         else {
-                            const display = document.querySelector('#display-container');
-                            const prevEquation = document.querySelector('#equation');
-                            const prevResult = document.querySelector('#result');
-                            if (prevEquation !== null) {
-                                display.removeChild(prevEquation);
-                            }
-                            if (prevResult !== null) {
-                                display.removeChild(prevResult);
-                                equation = [prevResult.textContent]
-                                console.log(equation)
-                            }
-                            equation[equation.length - 1] *= -1
-                            refreshDisplay(equation)
+                            equation.splice(endIndex + 1, num.length)
                         }
+
+                        num = parseFloat(num.join("")) * -1
+                        num = String(num)
+                        equation.push(num)
+
+                        const display = document.querySelector('#display-container');
+                        const prevEquation = document.querySelector('#equation');
+                        const prevResult = document.querySelector('#result');
+                        if (prevEquation !== null) {
+                            display.removeChild(prevEquation);
+                        }
+                        if (prevResult !== null) {
+                            display.removeChild(prevResult);
+                            equation = [prevResult.textContent]
+                            console.log(equation)
+                        }
+                        refreshDisplay(equation)
                     }
                 }
                 else if (arg === '.') {

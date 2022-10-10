@@ -1,18 +1,73 @@
-#container {
-    max-width: 33%;
-    display: grid;
+body {
+    background-color: lightslategrey;
+    display: flex;
     justify-content: center;
     align-items: center;
-    grid-template-areas:
-        "equation"
-        "result"
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    border: 1px solid white;
+    margin: 25%;
+}
+
+#display-container {
+    color: white;
+    padding: 25px;
+    font-size: 40px;
+    background-color: grey;
+}
+
+button {
+    display: flex;
+    flex: 1;
+    font-size: 25px;
+    justify-content: center;
+    border: none;
+    padding: 25px;
+}
+
+button:hover {
+    background-color: white;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+    background-color: lightgrey;
+    gap: 3px;
+    padding: 1px;
 }
 
 #equation {
-    grid-area: equation;
+    display: flex;
+    justify-content: flex-end;
 }
 
 #result {
-    grid-area: result;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#row_one {
+    display: flex;
+    gap: 3px;
+}
+
+#row_two {
+    display: flex;
+    gap: 3px;
+}
+
+#row_three {
+    display: flex;
+    gap: 3px;
+}
+
+#row_four {
+    display: flex;
+    gap: 3px;
 }
 

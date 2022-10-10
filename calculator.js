@@ -13,7 +13,7 @@ function multiply (a,b) {
 function divide (a,b) {
     if (b === 0) {
         alert("You can't divide by 0!");
-        return;
+        return null;
     }
     return a / b;
 }
@@ -47,7 +47,11 @@ function evaluate(equation) {
             if (star === -1) {
                 a = parseFloat(exp[slash-1]);
                 b = parseFloat(exp[slash+1]);
-                exp.splice(slash-1, 3, divide(a,b));
+                divResult = divide(a,b)
+                if (!divResult) {
+                    return null;
+                }
+                exp.splice(slash-1, 3, divResult);
             }
             else if (slash === -1) {
                 a = parseFloat(exp[star-1]);
@@ -98,7 +102,7 @@ function evaluate(equation) {
 
 function refreshDisplay(equation) {
     // refresh equation
-    const output = equation.join("");
+    let output = equation.join("");    
     const display = document.querySelector('#display-container');
     const prevEquation = document.querySelector('#equation');
     if (prevEquation !== null) {
@@ -151,13 +155,16 @@ function populateDisplay() {
                     if (prevResult === null) {
                         if (equation.length !== 1) {
                             result = evaluate(equation);
-                            if (result % 1 !== 0) {
-                                result = result.toFixed(2);
+                            if (result) {
+                                if (result % 1 !== 0) {
+                                    result = result.toFixed(2);
+                                }
+                                // result = result.toLocaleString('en-US')
+                                displayResult = document.createElement('div');
+                                displayResult.setAttribute('id','result');
+                                displayResult.textContent = result;
+                                display.appendChild(displayResult);
                             }
-                            displayResult = document.createElement('div');
-                            displayResult.setAttribute('id','result');
-                            displayResult.textContent = result;
-                            display.appendChild(displayResult);
                         }
                     }
                 }
@@ -296,13 +303,16 @@ function populateDisplay() {
                 if (prevResult === null) {
                     if (equation.length !== 1) {
                         result = evaluate(equation);
-                        if (result % 1 !== 0) {
-                            result = result.toFixed(2);
+                        if (result) {
+                            if (result % 1 !== 0) {
+                                result = result.toFixed(2);
+                            }
+                            // esult = result.toLocaleString('en-US')
+                            displayResult = document.createElement('div');
+                            displayResult.setAttribute('id','result');
+                            displayResult.textContent = result;
+                            display.appendChild(displayResult);
                         }
-                        displayResult = document.createElement('div');
-                        displayResult.setAttribute('id','result');
-                        displayResult.textContent = result;
-                        display.appendChild(displayResult);
                     }
                 }
             }
